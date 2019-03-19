@@ -8,7 +8,9 @@ use think\Request;
 use app\api\controller\Send;
 use app\api\controller\Api;
 use app\api\model\ApiuserModel;
-use app\api\model\UserModel;
+use app\api\model\User as UserModel;
+use app\api\utils\Base;
+use think\facade\Config;
 class User extends Api
 {
     /**
@@ -42,7 +44,6 @@ class User extends Api
      */
     public function save(Request $request)
     {
-//        dump($this->uid);
         try{
             $username = $request->post('username');
             $avatarUrl = $request->post('avatarUrl');
@@ -51,18 +52,31 @@ class User extends Api
             {
                 return self::returnMsg(401,$validate->getError());
             }
-            $user = new User();
+            $user = new UserModel();
             $user->avatar_url = $avatarUrl;
             $user->user_name = $username;
             if($user->save()){
-                return self::returnMsg(200,'添加成功');
+                $user_info  = $user->find($user->id);
+                return self::returnMsg(200,'添加成功',$user_info);
+            }else{
+                return self::returnMsg(401,"添加失败");
             }
-
-
         }catch (Exception $e){
-            echo $e;
+            return self::returnMsg(401,$e);
         }
 
+    }
+
+    public function getWxAppid(Request $request){
+        $validate = new \app\api\validate\User;
+        if(!$validate->scene('code')->check(input('')))
+        {
+            return self::returnMsg(401,$validate->getError());
+        }
+        $code = $request->post('code');
+//        $url = "https://api.weixin.qq.com/sns/jscode2session?appid=".Config::get('wx.appid')."&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
+//        $result = Base::httpfun($url);
+        return self::returnMsg(200,"",Config::get("wx"));
     }
 
     /**

@@ -61,7 +61,7 @@ Page({
       },
       header: {
         "Content-Type": "applciation/json",
-        "authentication":"12 MTU4ODk4NDU0NDI6ZTVKV3lJM0JNNGQyM2x6cW1oRUY3NmNuRGlaUDVzNkg6MTI="
+        "authentication":"1 MTU4ODk4NDU0NDI6NjBqTmFMcmk3NXdFdVFtUks0R25NOEg0T1Q5YjEyeWs6MQ=="
       },
       method: "POST",
       success: function (res) {
@@ -83,7 +83,6 @@ Page({
       userInfo: e.detail.userInfo,
       hasUserInfo: true
     })
-    this.myGetUserInfo()
   },
   /**
    * 找人提问

@@ -17,8 +17,8 @@ class GetAuthentication extends Controller
 
         //生成访问的密钥，需要用户的appid,uid,access_token
         $appid = "15889845442";
-        $uid = "12";
-        $accesstoken = "e5JWyI3BM4d23lzqmhEF76cnDiZP5s6H";
+        $uid = "1";
+        $accesstoken = "wruV2axJb3GN72Y0AE6Z3s6qB4mIyHpL";
         $base = $appid.':'.$accesstoken.':'.$uid;
         $opt['authentication'] = $uid." ".base64_encode($base);
         var_dump($opt);
