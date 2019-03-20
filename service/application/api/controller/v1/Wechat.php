@@ -8,12 +8,12 @@
 
 namespace app\api\controller\v1;
 
-
-use app\api\controller\Api;
+use app\api\controller\Send;
 use think\App;
-
-class Wechat extends Api
+use think\Controller;
+class Wechat extends Controller
 {
+    use Send;
     public static $loginUrl ;
     function __construct($code)
     {
@@ -23,7 +23,7 @@ class Wechat extends Api
     }
 
     public static function loginWechat(){
-        $token = curl_get(self::loginUrl);
+        $token = curl_get(self::$loginUrl);
         $token = json_decode($token,true);
         if(!$token){
             return self::returnMsg(401,'登陆失败');
