@@ -19,5 +19,6 @@ class User extends Validate
 
     protected $scene = [
         'code'  =>  ['code'],
+        'username'  =>  ['username'],
     ];
 }

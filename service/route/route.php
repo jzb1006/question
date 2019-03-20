@@ -29,7 +29,7 @@ Route::post(':version/apiuser/save','api/:version.apiuser/save');       //添加
 
 
 //获取getAuthentication
-Route::resource(':version/getAuthentication/index', 'api/:version.GetAuthentication');
+Route::post(':version/getAuthentication/index', 'api/:version.GetAuthentication/index');
 //所有路由匹配不到情况下触发该路由
 Route::miss('\app\api\controller\Exception::miss');
 

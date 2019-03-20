@@ -97,10 +97,10 @@ class Token
 			self::$appsercet = $user['appsercet'];
 		}
 		//签名检测
-		$sign = Oauth::makeSign($params,self::$appsercet);
-		if($sign !== $params['sign']){
-			return self::returnMsg(401,'sign错误','sign：'.$sign);
-		}
+//		$sign = Oauth::makeSign($params,self::$appsercet);
+//		if($sign !== $params['sign']){
+//			return self::returnMsg(401,'sign错误',['sign'=>$sign]);
+//		}
 	}
 
 	/**

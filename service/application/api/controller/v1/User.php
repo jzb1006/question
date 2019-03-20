@@ -10,7 +10,7 @@ use app\api\controller\Api;
 use app\api\model\ApiuserModel;
 use app\api\model\User as UserModel;
 use app\api\utils\Base;
-use think\facade\Config;
+use app\api\controller\v1\Wechat;
 class User extends Api
 {
     /**
@@ -48,7 +48,7 @@ class User extends Api
             $username = $request->post('username');
             $avatarUrl = $request->post('avatarUrl');
             $validate = new \app\api\validate\User;
-            if(!$validate->check(input('')))
+            if(!$validate->scene('username')->check(input('')))
             {
                 return self::returnMsg(401,$validate->getError());
             }
@@ -74,9 +74,9 @@ class User extends Api
             return self::returnMsg(401,$validate->getError());
         }
         $code = $request->post('code');
-//        $url = "https://api.weixin.qq.com/sns/jscode2session?appid=".Config::get('wx.appid')."&secret=SECRET&js_code=JSCODE&grant_type=authorization_code";
-//        $result = Base::httpfun($url);
-        return self::returnMsg(200,"",Config::get("wx"));
+        $wechat = new Wechat($code);
+        $token = $wechat::loginWechat();
+        return self::returnMsg(200,"",$token);
     }
 
     /**

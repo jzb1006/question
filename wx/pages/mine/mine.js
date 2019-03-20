@@ -1,6 +1,6 @@
 var app = getApp();
 var util = require('../../utils/util.js');
-
+var api = require('../../service/model/user.js');
 Page({
   /**
    * 页面的初始数据
@@ -16,6 +16,7 @@ Page({
   },
   //获取用户信息
   myGetUserInfo: function () {
+    
     var that = this;
     console.log("自动登陆");
     console.log(app.globalData.userInfo);
@@ -53,24 +54,25 @@ Page({
     /**
    * 如从未登录，进行添加至数据库操作
    */
-    wx.request({
-      url: 'http://localhost/v1/user',
-      data: {
-        'username': that.data.userInfo.nickName,
-        'avatarUrl': that.data.userInfo.avatarUrl,
-      },
-      header: {
-        "Content-Type": "applciation/json",
-        "authentication":"1 MTU4ODk4NDU0NDI6NjBqTmFMcmk3NXdFdVFtUks0R25NOEg0T1Q5YjEyeWs6MQ=="
-      },
-      method: "POST",
-      success: function (res) {
-        // that.setData({
-        //   fans: res.data.fans,
-        //   intro: res.data.intro
-        // });
-        console.log(res);
-      },
+    // wx.request({
+    //   url: 'http://localhost/v1/user',
+    var params = {
+        'username': this.data.userInfo.nickName,
+        'avatarUrl': this.data.userInfo.avatarUrl,
+      };
+    // var  header={
+    //     "Content-Type": "applciation/json",
+    //   };
+    //   method: "POST",
+    //   success: function (res) {
+       
+    //     console.log(res);
+    //   },
+    // })
+    api.saveUser(params).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+       console.log(err);
     })
   },
   /**
