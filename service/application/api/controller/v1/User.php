@@ -42,41 +42,45 @@ class User extends Api
      * @param  \think\Request  $request
      * @return \think\Response
      */
-    public function save(Request $request)
+    public function saveUserInfo($data=[])
     {
-        try{
-            $username = $request->post('username');
-            $avatarUrl = $request->post('avatarUrl');
-            $validate = new \app\api\validate\User;
-            if(!$validate->scene('username')->check(input('')))
-            {
-                return self::returnMsg(401,$validate->getError());
-            }
+          if(empty($data)){
+              return false;
+          }
             $user = new UserModel();
-            $user->avatar_url = $avatarUrl;
-            $user->user_name = $username;
-            if($user->save()){
-                $user_info  = $user->find($user->id);
-                return self::returnMsg(200,'添加成功',$user_info);
-            }else{
-                return self::returnMsg(401,"添加失败");
-            }
-        }catch (Exception $e){
-            return self::returnMsg(401,$e);
-        }
-
+          $openId = $data['openId'];
+          $userInfo = $user->where('open_id',$openId)->find();
+          if($userInfo){
+              $userInfo['session'] = $data['session3rd'];
+              return $userInfo;
+          }
+          $user::create([
+              "avatar_url"=>$data['avatarUrl'],
+              "user_name"=>$data['nickName'],
+              "open_id"=>$data['openId'],
+              "gender"=>$data['gender'],
+          ]);
+         $userInfo = $user->where('open_id',$openId)->find();
+         $userInfo['session'] = $data['session3rd'];
+          return $userInfo;
     }
 
     public function login(Request $request){
-        $validate = new \app\api\validate\User;
-        if(!$validate->scene('code')->check(input('')))
-        {
+        //参数验证
+        $validate = new \app\api\validate\User();
+        $code = $request->post('code');
+        $encrypted = $request->post('encryptedData');
+        $iv = $request->post('iv');
+        if(!$validate->scene('login')->check(input(''))){
             return self::returnMsg(401,$validate->getError());
         }
-        $code = $request->post('code');
+        if(empty($code) || empty($encrypted) ||empty($iv)){
+            return self::returnMsg(401,"请确认传递的参数是否正确");
+        }
         $wechat = new Wechat($code);
-        $token = $wechat::loginWechat();
-        return self::returnMsg(200,"",$token);
+        $userInfo = $wechat::loginWechat($encrypted,$iv);
+        $userInfo = $this->saveUserInfo($userInfo);
+        return self::returnMsg(0,"",$userInfo);
     }
 
     /**

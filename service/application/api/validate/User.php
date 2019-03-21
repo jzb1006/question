@@ -10,7 +10,9 @@ class User extends Validate
 
     protected $rule = [
         'username'       =>  'require',
-        'code'=>'require'
+        'code'=>'require',
+        'encryptedData'=>'require',
+        'iv'=>'require',
     ];
     protected $message  =   [
         'username.require'    => '用户名不能为空',
@@ -18,7 +20,7 @@ class User extends Validate
     ];
 
     protected $scene = [
-        'code'  =>  ['code'],
+        'login'  =>  ['code','encryptedData','iv'],
         'username'  =>  ['username'],
     ];
 }

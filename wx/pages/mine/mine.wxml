@@ -1,7 +1,7 @@
 <view>
   <view class="userinfo">
-    <image class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
-    <text decode="{{true}}" class="userinfo-nickname">{{userInfo.nickName}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  粉丝：{{fans}} 人</text>
+    <image class="userinfo-avatar" src="{{userInfo.avatar_url}}" background-size="cover"></image>
+    <text decode="{{true}}" class="userinfo-nickname">{{userInfo.user_name}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  粉丝：{{fans}} 人</text>
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 获取头像昵称 </button>
     <view class="cf-content">
       <view catchtap="updateIntro">

@@ -1,7 +1,6 @@
 var utils = require('./utils');
 var constants = require('./constants');
 var Session = require('./session');
-
 /***
  * @class
  * 表示登录过程中发生的异常
@@ -90,11 +89,11 @@ var login = function login(options) {
         var encryptedData = wxLoginResult.encryptedData;
         var iv = wxLoginResult.iv;
         var header = {};
-
+        var authentication = wx.getStorageSync('authentication')
         header[constants.WX_HEADER_CODE] = code;
         header[constants.WX_HEADER_ENCRYPTED_DATA] = encryptedData;
         header[constants.WX_HEADER_IV] = iv;
-
+        header['authentication'] = authentication;
         // 请求服务器登录地址，获得会话信息
         wx.request({
             url: options.loginUrl,
@@ -104,7 +103,7 @@ var login = function login(options) {
 
             success: function (result) {
                 var data = result.data;
-
+              console.log(data);
                 // 成功地响应会话信息
                 if (data && data[constants.WX_SESSION_MAGIC_ID]) {
                     if (data.session) {

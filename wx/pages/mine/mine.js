@@ -1,6 +1,7 @@
 var app = getApp();
 var util = require('../../utils/util.js');
 var api = require('../../service/model/user.js');
+var qcloud = require('../../utils/wafer-client-sdk/index.js');
 Page({
   /**
    * 页面的初始数据
@@ -14,91 +15,43 @@ Page({
     intro: "请在此处填写您的个人简介",
     fans: 0 //用户粉丝
   },
-  //获取用户信息
-  myGetUserInfo: function () {
-    
-    var that = this;
-  //   console.log("自动登陆");
-  //   console.log(app.globalData.userInfo);
-  //   if (app.globalData.userInfo) {
-  //     this.setData({
-  //       userInfo: app.globalData.userInfo,
-  //       hasUserInfo: true
-  //     })
-  //   } 
-  //   else if (this.data.canIUse) {
-  //     // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-  //     // 所以此处加入 callback 以防止这种情况
-  //     app.userInfoReadyCallback = res => {
-  //       console.log("消息",res);
-  //       this.setData({
-  //         userInfo: res.userInfo,
-  //         hasUserInfo: true
-  //       })
-  //     }
-  //   } 
-  //   else {
-  //     // 在没有 open-type=getUserInfo 版本的兼容处理
-  //     wx.getUserInfo({
-  //       success: res => {
-  //         console.log(res);
-  //         app.globalData.userInfo = res.userInfo
-  //         this.setData({
-  //           userInfo: res.userInfo,
-  //           hasUserInfo: true
-  //         })
-  //       }
-  //     })
-  //   }
-  //   console.log(that.data.userInfo.nickName)
-  //   /**
-  //  * 如从未登录，进行添加至数据库操作
-  //  */
-  //   // wx.request({
-  //   //   url: 'http://localhost/v1/user',
-  //   var params = {
-  //       'username': this.data.userInfo.nickName,
-  //       'avatarUrl': this.data.userInfo.avatarUrl,
-  //     };
-  //   // var  header={
-  //   //     "Content-Type": "applciation/json",
-  //   //   };
-  //   //   method: "POST",
-  //   //   success: function (res) {
-       
-  //   //     console.log(res);
-  //   //   },
-  //   // })
-  //   api.saveUser(params).then((res)=>{
-  //     console.log(res)
-  //   }).catch((err)=>{
-  //      console.log(err);
-  //   })
+  /**
+   * 获取用户信息
+   */
+  getUserInfo: function () {
+    var self = this;
     wx.login({
       success: function (loginResult) {
-        var params = {
-          "code": loginResult.code
-        }
-        api.wxLogin(params).then((res)=>{
-          console.log(res);
-          
-        })
+            wx.getUserInfo({
+              success: function(userInfo){
+                var code = loginResult.code;
+                var encryptedData = userInfo.encryptedData;
+                var iv = userInfo.iv;
+                var params = {
+                  code,
+                  encryptedData,
+                  iv
+                }
+                api.wxLogin(params).then((res) => {
+                  console.log(res);
+                  wx.setStorage({
+                    key: 'miniSession',
+                    data: res.data.data.info.session,
+                  })
+                  self.setData({
+                    userInfo:res.data.data.info,
+                    fansh:res.data.data.info.fansh,
+                    intro: res.data.data.info.info,
+                  })
+                })
+              }
+          })
+
       },
       fail: function (loginError) {
         console.log(loginError)
       },
     });
-  },
-  /**
-   * 获取用户信息
-   */
-  getUserInfo: function (e) {
-    console.log(e)
-    app.globalData.userInfo = e.detail.userInfo
-    this.setData({
-      userInfo: e.detail.userInfo,
-      hasUserInfo: true
-    })
   },
   /**
    * 找人提问
@@ -195,6 +148,5 @@ Page({
     })
   },
   onLoad: function () {
-    this.myGetUserInfo();
   },
 })
