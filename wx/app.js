@@ -1,32 +1,8 @@
 //app.js
+var config = require('./config/config.js');
 App({
   onLaunch: function () {
-    // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
-    // 登录
-    wx.login({
-      success: res => {
-        // 发送 res.code 到后台换取 openId, sessionKey, unionId
-        if (res.code) {
-          // 发起网络请求
-          wx.request({
-            url: 'http://localhost/v1/user/getAppid',
-            data: {
-              'code':res.code
-            },
-            header: {
-              "Content-Type": "applciation/json",
-              "authentication": "1 MTU4ODk4NDU0NDI6NjBqTmFMcmk3NXdFdVFtUks0R25NOEg0T1Q5YjEyeWs6MQ=="
-            },
-            method: "POST",
-          })
-        } else {
-          console.log('登录失败！' + res.errMsg)
-        }
-      }
-    })
+    
     // 获取用户信息
     wx.getSetting({
       success: res => {
@@ -51,11 +27,13 @@ App({
     userInfo: null,
     access_token:'',
     refresh_token:'',
-    authentication:'',
     apiHost:'http://localhost/v1/',
     appid :'15889845442',
     mobile : '15889845442',
     nonce : '123456',
     uid : '1'
+  },
+  config:{
+    config
   }
 })

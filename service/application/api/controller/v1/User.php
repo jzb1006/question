@@ -67,7 +67,7 @@ class User extends Api
 
     }
 
-    public function getWxAppid(Request $request){
+    public function login(Request $request){
         $validate = new \app\api\validate\User;
         if(!$validate->scene('code')->check(input('')))
         {

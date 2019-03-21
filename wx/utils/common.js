@@ -28,26 +28,39 @@ function getAccesstoken() {
      
     })
   }
+
+function _getAuth(access_token){
+   return new Promise((resolve,reject)=>{
+     wx.request({
+       url: app.globalData.apiHost + 'getAuthentication/index',
+       method: 'POST',
+       data: {
+         'appid': app.globalData.appid,
+         'uid': app.globalData.uid,
+         'accesstoken': access_token
+       },
+       success(res) {
+         resolve(res)
+       }
+     })
+   })
+}
+
+
 //获得访问接口密钥
 function getAuthentication(){
   getAccesstoken().then((res)=>{
     app.globalData.access_token = res.data.access_token;
     app.globalData.refresh_token = res.data.refresh_token;
-    wx.request({
-      url: app.globalData.apiHost+'getAuthentication/index',
-      method:'POST',
-      data:{
-        'appid': app.globalData.appid,
-        'uid': app.globalData.uid,
-        'accesstoken': app.globalData.access_token
-      },
-      success(res){
-        if(res.data.code==200){
-          app.globalData.authentication = res.data.data.authentication;
-          console.log(app.globalData.refresh_token)
-        }
+    return _getAuth(app.globalData.access_token);
+  }).then((res)=>{
+      if (res.data.code == 200) {
+           app.globalData.authentication = res.data.data.authentication;
+           wx.setStorage({
+             key: 'authentication',
+             data: res.data.data.authentication,
+           })
       }
-    })
   }).catch((err)=>{
     console.log(err);
   });

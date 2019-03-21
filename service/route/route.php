@@ -17,8 +17,8 @@ Route::post(':version/token/token','api/:version.token/token');  //生成access_
 Route::post(':version/token/refresh','api/:version.token/refresh');  //刷新access_token
 //Route::resource(':version/token','api/:version.token/refresh');
 
-//获取用户的appIDgetWxAppid
-Route::post(':version/user/getAppid','api/:version.User/getWxAppid');  //生成access_token
+//用户登录
+Route::post(':version/user/login','api/:version.User/login');  //生成access_token
 
 
 
