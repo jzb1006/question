@@ -36,3 +36,6 @@ Route::miss('\app\api\controller\Exception::miss');
 //Route::resource(':version/news/data','api/:version.News');
 Route::get(':version/news','api/:version.News');
 
+
+//添加问题
+Route::resource(':version/question','api/:version.question');

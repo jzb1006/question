@@ -2,6 +2,7 @@
 
 namespace app\api\controller\v1;
 
+use app\api\controller\PublicApi;
 use think\Controller;
 use think\Exception;
 use think\Request;
@@ -11,7 +12,7 @@ use app\api\model\ApiuserModel;
 use app\api\model\User as UserModel;
 use app\api\utils\Base;
 use app\api\controller\v1\Wechat;
-class User extends Api
+class User extends PublicApi
 {
     /**
      * 显示资源列表

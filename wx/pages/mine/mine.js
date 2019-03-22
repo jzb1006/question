@@ -24,6 +24,8 @@ Page({
       success: function (loginResult) {
             wx.getUserInfo({
               success: function(userInfo){
+                console.log(userInfo)
+                console.log(loginResult)
                 var code = loginResult.code;
                 var encryptedData = userInfo.encryptedData;
                 var iv = userInfo.iv;

@@ -1,5 +1,8 @@
 <?php
 
+use app\api\controller\Send;
+use think\facade\Cache;
+use think\Request;
 /**
  * @param string $url post请求地址
  * @param array $params
@@ -112,6 +115,18 @@ function object_to_array($obj) {
     }
 
     return $obj;
+
+}
+ function checkLogin(Request $request){
+    $session = $request->header('3rd-session');
+    if(!$session){
+        return Send::returnMsg(401,'用户没有登陆');
+    }
+    $appid = Cache::get($session);
+    if($appid){
+        return $appid;
+    }
+    return Send::returnMsg(401,'用户没有登陆');
 }
 
 
