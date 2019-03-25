@@ -33,7 +33,7 @@ class Wechat extends Controller
         $userInfo= object_to_array(json_decode($userInfo));
         $session3rd = getRandChar(16);
         $userInfo['session3rd'] = $session3rd;
-        cache($session3rd, config('wx.appid') . $token['session_key'],1*1000*60*5);
+        cache($session3rd, $userInfo['openId'].'+'.$token['session_key'],1*1000*60*5);
         return $userInfo;
     }
 

@@ -3,6 +3,7 @@
 use app\api\controller\Send;
 use think\facade\Cache;
 use think\Request;
+use app\api\model\User;
 /**
  * @param string $url post请求地址
  * @param array $params
@@ -124,7 +125,9 @@ function object_to_array($obj) {
     }
     $appid = Cache::get($session);
     if($appid){
-        return $appid;
+        $appid = explode('+',$appid);
+        $uid = User::where('open_id',trim($appid[0]))->find();
+        return $uid->id;
     }
     return Send::returnMsg(401,'用户没有登陆');
 }
